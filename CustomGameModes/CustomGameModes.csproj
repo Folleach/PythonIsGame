@@ -62,4 +62,7 @@
   <PropertyGroup>
     <PostBuildEvent>MOVE /Y "$(TargetDir)$(TargetName)$(TargetExt)" "$(ProjectDir)..\PythonIsGame\bin\Debug\Modifications\$(TargetName)$(TargetExt)"</PostBuildEvent>
   </PropertyGroup>
+  <PropertyGroup>
+    <PreBuildEvent>if not exist "$(ProjectDir)..\PythonIsGame\bin\Debug\Modifications" mkdir "$(ProjectDir)..\PythonIsGame\bin\Debug\Modifications"</PreBuildEvent>
+  </PropertyGroup>
 </Project>
