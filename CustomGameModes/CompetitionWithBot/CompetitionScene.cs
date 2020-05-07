@@ -28,54 +28,55 @@ namespace CustomGameModes.CompetitionWithBot
         {
             sceneManager = ownerManager;
             base.Create(ownerManager, data);
-            Map = new ChunkedMap(new AreaMapGenerator(Left, Up, Right, Bottom));
-            Player = new Snake(2, 2, Map, "player", true);
-            bot = new SnakeBot(10, 10, Map, "bot");
-            bot.Speed = 6f;
-            Map.RegisterIntersectionWithMaterial(Player.Head, typeof(AppleMaterial), m => IntersectWithFood(Player, m));
-            Map.RegisterIntersectionWithMaterial(bot.Head, typeof(AppleMaterial), m => IntersectWithFood(bot, m));
-            Map.RegisterIntersectionWithMaterial(Player.Head, typeof(WallMaterial), m => GameOver("Человек убился об стену, победили машины."));
-            Map.RegisterIntersectionWithMaterial(bot.Head, typeof(WallMaterial), m => GameOver("Вы победили!"));
-            Map.RegisterIntersectionWithEntity(Player.Head, typeof(SnakeBody), e => GameOver("Алгоритм поиска пути смог поймать человека в ловушку?"));
-            Map.RegisterIntersectionWithEntity(bot.Head, typeof(SnakeBody), e => GameOver("Бот был слишком глуп..."));
+            map = new ChunkedMap(new AreaMapGenerator(Left, Up, Right, Bottom));
+            player = new Snake(2, 2, map, "player", true);
+            bot = new SnakeBot(10, 10, map, "bot");
+            bot.Speed = 16f;
+            map.RegisterIntersectionWithMaterial(player.Head, typeof(AppleMaterial), m => IntersectWithFood(player, m));
+            map.RegisterIntersectionWithMaterial(bot.Head, typeof(AppleMaterial), m => IntersectWithFood(bot, m));
+            map.RegisterIntersectionWithMaterial(player.Head, typeof(WallMaterial), m => GameOver("Человек убился об стену, победили машины.", false));
+            map.RegisterIntersectionWithMaterial(bot.Head, typeof(WallMaterial), m => GameOver("Вы победили!", true));
+            map.RegisterIntersectionWithEntity(player.Head, typeof(SnakeBody), e => GameOver("Алгоритм поиска пути смог поймать человека в ловушку?", false));
+            map.RegisterIntersectionWithEntity(bot.Head, typeof(SnakeBody), e => GameOver("Бот был слишком глуп...", true));
             KeyDownHandlers[Keys.A] = e => StepInDirection(Direction.Left);
             KeyDownHandlers[Keys.W] = e => StepInDirection(Direction.Up);
             KeyDownHandlers[Keys.D] = e => StepInDirection(Direction.Right);
             KeyDownHandlers[Keys.S] = e => StepInDirection(Direction.Down);
-            Map.Update();
-            Map.SetMaterial(new AppleMaterial(), new Point(11, 11));
+            map.Update();
+            map.SetMaterial(new AppleMaterial(), new Point(11, 11));
         }
 
         public override void Update(TimeSpan delta)
         {
-            camera.TargetPosition = new Point(Player.X - (int)(Width / (2 * camera.Scale)), Player.Y - (int)(Height / (2 * camera.Scale)));
+            camera.TargetPosition = new Point(player.X - (int)(Width / (2 * camera.Scale)), player.Y - (int)(Height / (2 * camera.Scale)));
             camera.Update();
             bot.Update(delta);
         }
 
-        private void GameOver(string message)
+        private void GameOver(string message, bool isWin)
         {
             sceneManager.ReplaceScene(new GameOverScene(), new GameOverModel()
             {
+                IsWin = isWin,
                 Message = message,
-                Score = Player.Score,
+                Score = player.Score,
                 GameScene = this
             });
         }
 
         private void StepInDirection(Direction direction)
         {
-            Player.Direction = direction;
-            Player.Update();
-            Map.Update();
+            player.Direction = direction;
+            player.Update();
+            map.Update();
         }
 
         private void IntersectWithFood(Snake snake, PositionMaterial obj)
         {
             var apple = obj.Material as AppleMaterial;
             snake.Score += apple.NutritionalValue;
-            Map.RemoveMaterial(obj.Position);
-            Map.SetMaterial(new AppleMaterial(), GetRandomPoint());
+            map.RemoveMaterial(obj.Position);
+            map.SetMaterial(new AppleMaterial(), GetRandomPoint());
             snake.AddTailSegment();
         }
 

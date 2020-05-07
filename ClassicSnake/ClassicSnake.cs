@@ -25,27 +25,27 @@ namespace ClassicSnake
         {
             sceneManager = ownerManager;
             base.Create(ownerManager, data);
-            Map = new ChunkedMap(new AreaMapGenerator(Left, Up, Right, Bottom, false), 1);
-            Player = new Snake(2, 2, Map, "player", true);
-            Map.AddEntity(Player.Head, true);
-            Map.RegisterIntersectionWithMaterial(Player.Head, typeof(WallMaterial), material => GameOver("Ударился об стенку..."));
-            Map.RegisterIntersectionWithMaterial(Player.Head, typeof(AppleMaterial), IntersectWithFood);
-            Map.RegisterIntersectionWithEntity(Player.Head, typeof(SnakeBody), entity => GameOver("Укусил себя и умер..."));
-            KeyDownHandlers[Keys.A] = e => Player.Direction = Direction.Left;
-            KeyDownHandlers[Keys.W] = e => Player.Direction = Direction.Up;
-            KeyDownHandlers[Keys.D] = e => Player.Direction = Direction.Right;
-            KeyDownHandlers[Keys.S] = e => Player.Direction = Direction.Down;
+            map = new ChunkedMap(new AreaMapGenerator(Left, Up, Right, Bottom, false), 1);
+            player = new Snake(2, 2, map, "player", true);
+            map.AddEntity(player.Head, true);
+            map.RegisterIntersectionWithMaterial(player.Head, typeof(WallMaterial), material => GameOver("Ударился об стенку и умер... Вот вопрос, зачем он полез на стенку?"));
+            map.RegisterIntersectionWithMaterial(player.Head, typeof(AppleMaterial), IntersectWithFood);
+            map.RegisterIntersectionWithEntity(player.Head, typeof(SnakeBody), entity => GameOver("Укусил себя и умер..."));
+            KeyDownHandlers[Keys.A] = e => player.Direction = Direction.Left;
+            KeyDownHandlers[Keys.W] = e => player.Direction = Direction.Up;
+            KeyDownHandlers[Keys.D] = e => player.Direction = Direction.Right;
+            KeyDownHandlers[Keys.S] = e => player.Direction = Direction.Down;
             scoreboard.BackColor = Color.Transparent;
             AddControl(scoreboard);
-            Map.SetMaterial(new AppleMaterial(), GetRandomPoint());
+            map.SetMaterial(new AppleMaterial(), GetRandomPointInArea());
         }
 
         public override void Update(TimeSpan delta)
         {
-            camera.TargetPosition = new Point(Player.X - (int)(Width / (2 * camera.Scale)), Player.Y - (int)(Height / (2 * camera.Scale)));
+            camera.TargetPosition = new Point(player.X - (int)(Width / (2 * camera.Scale)), player.Y - (int)(Height / (2 * camera.Scale)));
             camera.Update();
-            Player.Update();
-            Map.Update();
+            player.Update();
+            map.Update();
         }
 
         private void GameOver(string message)
@@ -53,7 +53,7 @@ namespace ClassicSnake
             sceneManager.ReplaceScene(new GameOverScene(), new GameOverModel()
             {
                 Message = message,
-                Score = Player.Score,
+                Score = player.Score,
                 GameScene = this
             });
         }
@@ -61,14 +61,14 @@ namespace ClassicSnake
         private void IntersectWithFood(PositionMaterial obj)
         {
             var apple = obj.Material as AppleMaterial;
-            Player.Score += apple.NutritionalValue;
-            Map.RemoveMaterial(obj.Position);
-            Map.SetMaterial(new AppleMaterial(), GetRandomPoint());
-            scoreboard.Text = "Очки: " + Player.Score;
-            Player.AddTailSegment();
+            player.Score += apple.NutritionalValue;
+            map.RemoveMaterial(obj.Position);
+            map.SetMaterial(new AppleMaterial(), GetRandomPointInArea());
+            scoreboard.Text = "Очки: " + player.Score;
+            player.AddTailSegment();
         }
 
-        private Point GetRandomPoint()
+        private Point GetRandomPointInArea()
         {
             var random = new Random();
             return new Point(Left + random.Next(Right - Left), Up + random.Next(Bottom - Up));

@@ -48,6 +48,7 @@
     <Compile Include="InfinityWorld\InfinityWorldGameMode.cs" />
     <Compile Include="InfinityWorld\InfinityWorldGenerator.cs" />
     <Compile Include="InfinityWorld\InfinityWorldScene.cs" />
+    <Compile Include="InfinityWorld\ChoiceSeedScene.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WithTeleports\WithTeleportsGameMode.cs" />
     <Compile Include="WithTeleports\WithTeleportsScene.cs" />

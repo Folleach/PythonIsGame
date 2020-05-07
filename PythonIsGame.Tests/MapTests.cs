@@ -1,5 +1,6 @@
 ﻿using NUnit.Framework;
 using PythonIsGame.Common;
+using PythonIsGame.Common.Entities;
 using PythonIsGame.Common.Map;
 using PythonIsGame.Common.Materials;
 using System;
@@ -44,6 +45,22 @@ namespace PythonIsGame.Tests
         public void MaterialSet_ShouldNotChanged()
         {
             MaterialSet(new AppleMaterial(), new Point(128, 128));
+        }
+
+        [Test]
+        public void EntityIntersection()
+        {
+            var map = CreateEmptyMap();
+            var point = new Point(13, 7);
+            var entityInitiator = new Entity();
+            entityInitiator.Position = point;
+
+            map.RegisterIntersectionWithEntity(entityInitiator, typeof(SnakeBody), e => Assert.AreEqual(point, e.Position));
+            map.AddEntity(entityInitiator, false);
+            map.AddEntity(new SnakeBody(13, 7), false);
+            map.AddEntity(new SnakeBody(0, 0), false);
+            map.Update();
+
         }
 
         public void MaterialSet(IMaterial material, Point point)

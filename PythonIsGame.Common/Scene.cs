@@ -21,8 +21,6 @@ namespace PythonIsGame.Common
         public Dictionary<Keys, Action<KeyEventArgs>> KeyDownHandlers
             = new Dictionary<Keys, Action<KeyEventArgs>>();
 
-        protected Camera camera = new Camera();
-
         protected Dictionary<Color, SolidBrush> brushes = new Dictionary<Color, SolidBrush>();
 
         public void AddControl(Control element)
@@ -50,9 +48,7 @@ namespace PythonIsGame.Common
 
         public virtual void Draw(Graphics graphic)
         {
-            var camPos = camera.GetTransformPosition();
-            graphic.ScaleTransform(camera.Scale, camera.Scale);
-            graphic.TranslateTransform(camPos.X, camPos.Y);
+            graphic.Clear(GameColors.Background);
         }
 
         public virtual void Resize()

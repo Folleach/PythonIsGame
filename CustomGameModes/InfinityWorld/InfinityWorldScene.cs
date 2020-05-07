@@ -3,6 +3,7 @@ using PythonIsGame.Common.Map;
 using PythonIsGame.Common.Materials;
 using PythonIsGame.Common.SceneModels;
 using PythonIsGame.Common.Scenes;
+using PythonIsGame.Common.UI;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -10,21 +11,20 @@ using System.Windows.Forms;
 
 namespace CustomGameModes.InfinityWorld
 {
-    public class InfinityWorldScene : Scene
+    public class InfinityWorldScene : DefaultGameScene
     {
-        private ChunkedMap map;
-        private Snake player;
-
-        private Color background = Color.FromArgb(46, 50, 61);
-
-        private Label positionLabel = new Label();
-
-        private Dictionary<Color, SolidBrush> brushes = new Dictionary<Color, SolidBrush>();
+        private DrawLabel positionLabel = new DrawLabel(12, true);
+        private DrawLabel seedLabel = new DrawLabel(12, true);
 
         public override void Create(SceneManager ownerManager, object data)
         {
             base.Create(ownerManager, data);
-            map = new ChunkedMap(new InfinityWorldGenerator(87122356), 1);
+            int seed;
+            if (data is int)
+                seed = (int)data;
+            else
+                seed = new Random().Next();
+            map = new ChunkedMap(new InfinityWorldGenerator(seed), 1);
             player = new Snake(2, 2, map, "player", true);
             map.RegisterIntersectionWithMaterial(player.Head, typeof(WallMaterial), material => GameOver(ownerManager));
             map.RegisterIntersectionWithMaterial(player.Head, typeof(AppleMaterial), PlayerEat);
@@ -32,9 +32,11 @@ namespace CustomGameModes.InfinityWorld
             KeyDownHandlers[Keys.W] = e => player.Direction = Direction.Up;
             KeyDownHandlers[Keys.D] = e => player.Direction = Direction.Right;
             KeyDownHandlers[Keys.S] = e => player.Direction = Direction.Down;
-            positionLabel.BackColor = Color.Transparent;
-            positionLabel.ForeColor = Color.White;
+            seedLabel.Text = $"Seed: {seed}";
+            seedLabel.Top = positionLabel.Top + positionLabel.Height;
+            positionLabel.Width = seedLabel.Width = 300;
             AddControl(positionLabel);
+            AddControl(seedLabel);
         }
 
         public override void Update(TimeSpan delta)
@@ -49,7 +51,6 @@ namespace CustomGameModes.InfinityWorld
         public override void Draw(Graphics graphics)
         {
             base.Draw(graphics);
-            graphics.Clear(background);
             foreach (var obj in map.GetMaterials())
             {
                 graphics.FillRectangle(GetBrush(obj.Item1.Color), new Rectangle(obj.Item2, DefaultSize));
@@ -58,18 +59,6 @@ namespace CustomGameModes.InfinityWorld
             {
                 graphics.FillRectangle(GetBrush(obj.Color), new Rectangle(obj.Position, DefaultSize));
             }
-        }
-
-        public override void Resize()
-        {
-            positionLabel.Width = Width;
-        }
-
-        private Brush GetBrush(Color color)
-        {
-            if (!brushes.ContainsKey(color))
-                brushes[color] = new SolidBrush(color);
-            return brushes[color];
         }
 
         private void GameOver(SceneManager ownerManager)

@@ -8,7 +8,7 @@ namespace CustomGameModes.InfinityWorld
 
         public Scene CreateGameScene()
         {
-            return new InfinityWorldScene();
+            return new ChoiceSeedScene();
         }
 
         public void Initialize()
