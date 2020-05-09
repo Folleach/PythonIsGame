@@ -60,7 +60,20 @@ namespace PythonIsGame.Tests
             map.AddEntity(new SnakeBody(13, 7), false);
             map.AddEntity(new SnakeBody(0, 0), false);
             map.Update();
+        }
 
+        [Test]
+        public void RemoveEntityTest()
+        {
+            var map = CreateEmptyMap();
+            var head = new SnakeHead(0, 0);
+            var body = new SnakeBody(0, 0);
+            map.AddEntity(head, false);
+            map.AddEntity(body, false);
+            map.RegisterIntersectionWithEntity(head, typeof(SnakeBody), e => Assert.Fail("Entity was not completely removed from the map"));
+            map.RemoveEntity(body);
+            map.Update();
+            Assert.AreEqual(1, map.GetEntities().Count());
         }
 
         public void MaterialSet(IMaterial material, Point point)

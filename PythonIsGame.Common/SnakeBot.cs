@@ -34,6 +34,8 @@ namespace PythonIsGame.Common
 
         public void Update(TimeSpan delta)
         {
+            if (!Alive)
+                return;
             currentTime += delta.Milliseconds;
             if (currentTime > timeThresholdInMs)
             {
@@ -45,7 +47,7 @@ namespace PythonIsGame.Common
                 }
                 Direction = directions.First.Value;
                 directions.RemoveFirst();
-                base.Update();
+                StepTo(currentDirection);
                 map.Update();
                 currentTime = 0;
             }

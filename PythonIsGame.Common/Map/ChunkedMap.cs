@@ -16,6 +16,7 @@ namespace PythonIsGame.Common.Map
         private List<IEntity> entities;
         private Dictionary<Type, LinkedList<IEntity>> entitiesByType;
         private List<IEntity> chunksFollowFrom;
+        private Queue<Action> intersectingEvents;
         private int drawingRange;
 
         public ChunkedMap(IMapGenerator mapGenerator, int drawingRange = 1)
@@ -28,6 +29,7 @@ namespace PythonIsGame.Common.Map
             entities = new List<IEntity>();
             entitiesByType = new Dictionary<Type, LinkedList<IEntity>>();
             chunksFollowFrom = new List<IEntity>();
+            intersectingEvents = new Queue<Action>();
         }
 
         public bool AddEntity(IEntity entity, bool chunkFollow)
@@ -46,6 +48,8 @@ namespace PythonIsGame.Common.Map
         {
             var type = entity.GetType();
             entitiesByType[type].Remove(entity);
+            if (chunksFollowFrom.Contains(entity))
+                chunksFollowFrom.Remove(entity);
             return entities.Remove(entity);
         }
 
@@ -72,6 +76,7 @@ namespace PythonIsGame.Common.Map
         {
             foreach (var position in chunksFollowFrom.Select(entity => entity.Position))
                 LoadChunksFrom(position);
+            intersectingEvents.Clear();
             foreach (var entity in intersectingWithMaterials)
             {
                 var behindMaterial = GetMaterial(entity.Key.Position);
@@ -79,20 +84,29 @@ namespace PythonIsGame.Common.Map
                     continue;
                 var type = behindMaterial.Material.GetType();
                 if (entity.Value.ContainsKey(type))
-                    entity.Value[type].Invoke(behindMaterial);
+                {
+                    var x = entity.Value[type];
+                    intersectingEvents.Enqueue(() => x.Invoke(behindMaterial));
+                }
             }
             foreach (var entity in intersectingWithEntity)
             {
                 foreach (var type in entity.Value.Keys)
                 {
-                    if (entitiesByType.ContainsKey(type))
+                    if (!entitiesByType.ContainsKey(type))
+                        continue;
                     foreach (var item in entitiesByType[type])
                     {
                         if (entity.Key.Intersect(item))
-                            intersectingWithEntity[entity.Key][type].Invoke(item);
+                        {
+                            var x = intersectingWithEntity[entity.Key][type];
+                            intersectingEvents.Enqueue(() => x.Invoke(item));
+                        }
                     }
                 }
             }
+            while (intersectingEvents.Count != 0)
+                intersectingEvents.Dequeue().Invoke();
         }
 
         public PositionMaterial GetMaterial(Point position)

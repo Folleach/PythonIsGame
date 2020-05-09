@@ -3,43 +3,52 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Runtime.InteropServices;
 
 namespace PythonIsGame.Common
 {
-    public class Snake : IEnumerable<IEntity>
+    public class Snake
     {
         public int Score = 0;
         public readonly string Name;
 
+        public int X => Head.Position.X;
+        public int Y => Head.Position.Y;
+
+        public bool Alive { get; private set; } = true;
+
         public Direction Direction
         {
-            get => direction;
+            get => currentDirection;
             set
             {
                 if (CanTurn(value))
-                    direction = value;
+                    currentDirection = value;
             }
         }
-        protected Direction direction;
+        protected Direction currentDirection;
         protected Direction previousStepDirection;
 
         public SnakeHead Head { get; private set; }
         protected LinkedList<SnakeBody> tail = new LinkedList<SnakeBody>();
         protected IMap map;
 
-        public int X => Head.Position.X;
-        public int Y => Head.Position.Y;
-
         public Snake(int x, int y, IMap map, string name, bool chunkFollow = false)
         {
             Name = name;
             Head = new SnakeHead(x, y);
-            previousStepDirection = direction = Direction.None;
+            previousStepDirection = currentDirection = Direction.None;
             this.map = map;
             map.AddEntity(Head, chunkFollow);
         }
 
         public virtual void Update()
+        {
+            if (Alive)
+                StepTo(currentDirection);
+        }
+
+        public void StepTo(Direction direction)
         {
             if (tail.Count > 0)
             {
@@ -48,29 +57,35 @@ namespace PythonIsGame.Common
                 tail.AddFirst(t);
                 tail.First.Value.Position = Head.Position;
             }
-            var delta = GetDeltaPointBy(Head.Position, direction);
+            var delta = GetDeltaPointBy(direction);
             Head.Position = new Point(Head.Position.X + delta.X, Head.Position.Y + delta.Y);
             previousStepDirection = direction;
         }
 
         public void AddTailSegment()
         {
-            var delta = GetDeltaPointBy(Head.Position, direction);
+            var delta = GetDeltaPointBy(currentDirection);
             var body = new SnakeBody(Head.Position.X - delta.X, Head.Position.Y - delta.Y);
             tail.AddLast(body);
             map.AddEntity(body, false);
         }
 
-        public IEnumerator<IEntity> GetEnumerator()
+        public void Kill()
         {
+            foreach (var entity in GetEntities())
+                map.RemoveEntity(entity);
+            Alive = false;
+            tail = null;
+            Head = null;
+        }
+
+        public IEnumerable<IEntity> GetEntities()
+        {
+            if (!Alive)
+                yield break;
             yield return Head;
             foreach (var bodyItem in tail)
                 yield return bodyItem;
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
         }
 
         private bool CanTurn(Direction to)
@@ -81,7 +96,7 @@ namespace PythonIsGame.Common
                 || (to == Direction.Down && previousStepDirection != Direction.Up);
         }
 
-        private Point GetDeltaPointBy(Point point, Direction direction)
+        private Point GetDeltaPointBy(Direction direction)
         {
             switch (direction)
             {

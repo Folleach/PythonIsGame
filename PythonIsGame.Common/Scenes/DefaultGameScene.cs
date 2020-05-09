@@ -18,6 +18,7 @@ namespace PythonIsGame.Common.Scenes
 
         public override void Create(SceneManager ownerManager, object data)
         {
+            base.Create(ownerManager, data);
             colorMapping.Add(typeof(AppleMaterial), GameColors.AppleMaterialColor);
             colorMapping.Add(typeof(TeleportMaterial), GameColors.TeleportMaterialColor);
             colorMapping.Add(typeof(WallMaterial), GameColors.WallMaterialColor);
@@ -33,7 +34,7 @@ namespace PythonIsGame.Common.Scenes
             graphics.Clear(background);
             foreach (var obj in map.GetMaterials())
                 graphics.FillRectangle(GetBrush(colorMapping[obj.Item1.GetType()]), new Rectangle(obj.Item2, DefaultSize));
-            foreach (var obj in player)
+            foreach (var obj in player.GetEntities())
                 graphics.FillRectangle(GetBrush(colorMapping[obj.GetType()]), new Rectangle(obj.Position, DefaultSize));
         }
     }

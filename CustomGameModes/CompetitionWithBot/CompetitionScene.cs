@@ -35,9 +35,9 @@ namespace CustomGameModes.CompetitionWithBot
             map.RegisterIntersectionWithMaterial(player.Head, typeof(AppleMaterial), m => IntersectWithFood(player, m));
             map.RegisterIntersectionWithMaterial(bot.Head, typeof(AppleMaterial), m => IntersectWithFood(bot, m));
             map.RegisterIntersectionWithMaterial(player.Head, typeof(WallMaterial), m => GameOver("Человек убился об стену, победили машины.", false));
-            map.RegisterIntersectionWithMaterial(bot.Head, typeof(WallMaterial), m => GameOver("Вы победили!", true));
+            map.RegisterIntersectionWithMaterial(bot.Head, typeof(WallMaterial), m => bot.Kill());
             map.RegisterIntersectionWithEntity(player.Head, typeof(SnakeBody), e => GameOver("Алгоритм поиска пути смог поймать человека в ловушку?", false));
-            map.RegisterIntersectionWithEntity(bot.Head, typeof(SnakeBody), e => GameOver("Бот был слишком глуп...", true));
+            map.RegisterIntersectionWithEntity(bot.Head, typeof(SnakeBody), e => bot.Kill());
             KeyDownHandlers[Keys.A] = e => StepInDirection(Direction.Left);
             KeyDownHandlers[Keys.W] = e => StepInDirection(Direction.Up);
             KeyDownHandlers[Keys.D] = e => StepInDirection(Direction.Right);
@@ -83,7 +83,7 @@ namespace CustomGameModes.CompetitionWithBot
         public override void Draw(Graphics graphics)
         {
             base.Draw(graphics);
-            foreach (var obj in bot)
+            foreach (var obj in bot.GetEntities())
                 graphics.FillRectangle(GetBrush(colorMapping[obj.GetType()]), new Rectangle(obj.Position, DefaultSize));
         }
 
