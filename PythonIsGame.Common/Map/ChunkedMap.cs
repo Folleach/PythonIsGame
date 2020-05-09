@@ -125,6 +125,7 @@ namespace PythonIsGame.Common.Map
 
         public IEntity GetEntity(Point position)
         {
+            //TODO: Можно сделать оптимизацию используя куски карты
             foreach (var entity in entities)
             {
                 if (entity.Position == position)

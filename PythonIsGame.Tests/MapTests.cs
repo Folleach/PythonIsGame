@@ -50,7 +50,7 @@ namespace PythonIsGame.Tests
         [Test]
         public void EntityIntersection()
         {
-            var map = CreateEmptyMap();
+            var map = TestHelpers.EmptyMap;
             var point = new Point(13, 7);
             var entityInitiator = new Entity();
             entityInitiator.Position = point;
@@ -65,7 +65,7 @@ namespace PythonIsGame.Tests
         [Test]
         public void RemoveEntityTest()
         {
-            var map = CreateEmptyMap();
+            var map = TestHelpers.EmptyMap;
             var head = new SnakeHead(0, 0);
             var body = new SnakeBody(0, 0);
             map.AddEntity(head, false);
@@ -78,7 +78,7 @@ namespace PythonIsGame.Tests
 
         public void MaterialSet(IMaterial material, Point point)
         {
-            var map = CreateEmptyMap();
+            var map = TestHelpers.EmptyMap;
             map.SetMaterial(material, point);
             Assert.AreEqual(material, map.GetMaterial(point).Material);
             Assert.AreEqual(point, map.GetMaterial(point).Position);
@@ -87,15 +87,10 @@ namespace PythonIsGame.Tests
 
         public void MaterialCount(Tuple<IMaterial, Point>[] materials, int expectedCount)
         {
-            var map = CreateEmptyMap();
+            var map = TestHelpers.EmptyMap;
             foreach (var material in materials)
                 map.SetMaterial(material.Item1, material.Item2);
             Assert.AreEqual(expectedCount, map.GetMaterials().Count());
-        }
-
-        private IMap CreateEmptyMap()
-        {
-            return new ChunkedMap(new EmptyMapGenerator(16));
         }
     }
 }
