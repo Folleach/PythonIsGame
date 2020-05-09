@@ -30,14 +30,10 @@ namespace CustomGameModes.CompetitionWithBot
             base.Create(ownerManager, data);
             map = new ChunkedMap(new AreaMapGenerator(Left, Up, Right, Bottom));
             player = new Snake(2, 2, map, "player", true);
-            bot = new SnakeBot(10, 10, map, "bot");
-            bot.Speed = 16f;
+            InitializeBot();
             map.RegisterIntersectionWithMaterial(player.Head, typeof(AppleMaterial), m => IntersectWithFood(player, m));
-            map.RegisterIntersectionWithMaterial(bot.Head, typeof(AppleMaterial), m => IntersectWithFood(bot, m));
             map.RegisterIntersectionWithMaterial(player.Head, typeof(WallMaterial), m => GameOver("Человек убился об стену, победили машины.", false));
-            map.RegisterIntersectionWithMaterial(bot.Head, typeof(WallMaterial), m => bot.Kill());
             map.RegisterIntersectionWithEntity(player.Head, typeof(SnakeBody), e => GameOver("Алгоритм поиска пути смог поймать человека в ловушку?", false));
-            map.RegisterIntersectionWithEntity(bot.Head, typeof(SnakeBody), e => bot.Kill());
             KeyDownHandlers[Keys.A] = e => StepInDirection(Direction.Left);
             KeyDownHandlers[Keys.W] = e => StepInDirection(Direction.Up);
             KeyDownHandlers[Keys.D] = e => StepInDirection(Direction.Right);
@@ -62,6 +58,25 @@ namespace CustomGameModes.CompetitionWithBot
                 Score = player.Score,
                 GameScene = this
             });
+        }
+
+        private void InitializeBot()
+        {
+            var pos = GetRandomPoint();
+            bot = new SnakeBot(pos.X, pos.Y, map, "bot");
+            bot.Speed = 2000;
+            map.RegisterIntersectionWithMaterial(bot.Head, typeof(AppleMaterial), m => IntersectWithFood(bot, m));
+            map.RegisterIntersectionWithMaterial(bot.Head, typeof(WallMaterial), m => KillBot());
+            map.RegisterIntersectionWithEntity(bot.Head, typeof(SnakeBody), e => KillBot());
+        }
+
+        private void KillBot()
+        {
+            map.UnregisterIntersectionWithMaterial(bot.Head, typeof(AppleMaterial));
+            map.UnregisterIntersectionWithMaterial(bot.Head, typeof(WallMaterial));
+            map.UnregisterIntersectionWithEntity(bot.Head, typeof(SnakeBody));
+            bot.Kill();
+            InitializeBot();
         }
 
         private void StepInDirection(Direction direction)

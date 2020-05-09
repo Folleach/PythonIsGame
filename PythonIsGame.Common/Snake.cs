@@ -73,7 +73,7 @@ namespace PythonIsGame.Common
 
         public void StepTo(Direction direction)
         {
-            if (!CanTurn(Direction))
+            if (!CanTurn(direction))
                 return;
             if (tail.Count > 0)
             {
@@ -121,7 +121,7 @@ namespace PythonIsGame.Common
                 yield return bodyItem;
         }
 
-        private bool CanTurn(Direction to)
+        protected bool CanTurn(Direction to)
         {
             return (to == Direction.Left && previousStepDirection != Direction.Right)
                 || (to == Direction.Up && previousStepDirection != Direction.Down)
@@ -129,7 +129,7 @@ namespace PythonIsGame.Common
                 || (to == Direction.Down && previousStepDirection != Direction.Up);
         }
 
-        private Point GetDeltaPointBy(Direction direction)
+        protected Point GetDeltaPointBy(Direction direction)
         {
             switch (direction)
             {

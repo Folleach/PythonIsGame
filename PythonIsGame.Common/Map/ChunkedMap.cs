@@ -65,11 +65,25 @@ namespace PythonIsGame.Common.Map
             intersectingWithMaterials[entity][material] = callback;
         }
 
+        public void UnregisterIntersectionWithMaterial(IEntity entity, Type material)
+        {
+            if (!intersectingWithMaterials.ContainsKey(entity))
+                return;
+            intersectingWithMaterials[entity].Remove(material);
+        }
+
         public void RegisterIntersectionWithEntity(IEntity entity, Type otherEntity, Action<IEntity> callback)
         {
             if (!intersectingWithEntity.ContainsKey(entity))
                 intersectingWithEntity[entity] = new Dictionary<Type, Action<IEntity>>();
             intersectingWithEntity[entity][otherEntity] = callback;
+        }
+
+        public void UnregisterIntersectionWithEntity(IEntity entity, Type otherEntity)
+        {
+            if (!intersectingWithEntity.ContainsKey(entity))
+                return;
+            intersectingWithEntity[entity].Remove(otherEntity);
         }
 
         public void Update()
@@ -107,6 +121,16 @@ namespace PythonIsGame.Common.Map
             }
             while (intersectingEvents.Count != 0)
                 intersectingEvents.Dequeue().Invoke();
+        }
+
+        public IEntity GetEntity(Point position)
+        {
+            foreach (var entity in entities)
+            {
+                if (entity.Position == position)
+                    return entity;
+            }
+            return null;
         }
 
         public PositionMaterial GetMaterial(Point position)
