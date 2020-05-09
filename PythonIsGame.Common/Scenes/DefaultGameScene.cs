@@ -4,6 +4,7 @@ using PythonIsGame.Common.Materials;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Windows.Forms;
 
 namespace PythonIsGame.Common.Scenes
 {
@@ -24,6 +25,11 @@ namespace PythonIsGame.Common.Scenes
             colorMapping.Add(typeof(WallMaterial), GameColors.WallMaterialColor);
             colorMapping.Add(typeof(SnakeHead), GameColors.SnakeHead);
             colorMapping.Add(typeof(SnakeBody), GameColors.SnakeBody);
+
+            KeyDownHandlers[Keys.A] = e => player.Direction = Direction.Left;
+            KeyDownHandlers[Keys.W] = e => player.Direction = Direction.Up;
+            KeyDownHandlers[Keys.D] = e => player.Direction = Direction.Right;
+            KeyDownHandlers[Keys.S] = e => player.Direction = Direction.Down;
         }
 
         public override void Draw(Graphics graphics)

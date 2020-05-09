@@ -17,19 +17,15 @@ namespace CustomGameModes.WithTeleports
             player = new Snake(2, 2, map, "player", true);
             map.SetMaterial(new TeleportMaterial(new Point(10, 10)), new Point(2, 10));
             map.RegisterIntersectionWithMaterial(player.Head, typeof(TeleportMaterial), m => Teleport(player.Head, m));
-            KeyDownHandlers[Keys.A] = e => player.Direction = Direction.Left;
-            KeyDownHandlers[Keys.W] = e => player.Direction = Direction.Up;
-            KeyDownHandlers[Keys.D] = e => player.Direction = Direction.Right;
-            KeyDownHandlers[Keys.S] = e => player.Direction = Direction.Down;
             for (var i = 0; i < 222; i++)
                 player.AddTailSegment();
         }
 
         public override void Update(TimeSpan delta)
         {
+            player.Update(delta);
             camera.TargetPosition = new Point(player.X - (int)(Width / (2 * camera.Scale)), player.Y - (int)(Height / (2 * camera.Scale)));
             camera.Update();
-            player.Update();
             map.Update();
         }
 

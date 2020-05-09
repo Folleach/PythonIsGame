@@ -31,10 +31,6 @@ namespace ClassicSnake
             map.RegisterIntersectionWithMaterial(player.Head, typeof(WallMaterial), material => GameOver("Ударился об стенку и умер... Вот вопрос, зачем он полез на стенку?"));
             map.RegisterIntersectionWithMaterial(player.Head, typeof(AppleMaterial), IntersectWithFood);
             map.RegisterIntersectionWithEntity(player.Head, typeof(SnakeBody), entity => GameOver("Укусил себя и умер..."));
-            KeyDownHandlers[Keys.A] = e => player.Direction = Direction.Left;
-            KeyDownHandlers[Keys.W] = e => player.Direction = Direction.Up;
-            KeyDownHandlers[Keys.D] = e => player.Direction = Direction.Right;
-            KeyDownHandlers[Keys.S] = e => player.Direction = Direction.Down;
             scoreboard.BackColor = Color.Transparent;
             AddControl(scoreboard);
             map.SetMaterial(new AppleMaterial(), GetRandomPointInArea());
@@ -42,9 +38,9 @@ namespace ClassicSnake
 
         public override void Update(TimeSpan delta)
         {
+            player.Update(delta);
             camera.TargetPosition = new Point(player.X - (int)(Width / (2 * camera.Scale)), player.Y - (int)(Height / (2 * camera.Scale)));
             camera.Update();
-            player.Update();
             map.Update();
         }
 

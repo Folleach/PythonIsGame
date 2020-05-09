@@ -1,9 +1,7 @@
 ﻿using PythonIsGame.Common.Entities;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Runtime.InteropServices;
 
 namespace PythonIsGame.Common
 {
@@ -17,6 +15,19 @@ namespace PythonIsGame.Common
 
         public bool Alive { get; private set; } = true;
 
+        public float Speed
+        {
+            get => speed;
+            set
+            {
+                speed = value;
+                timeThresholdInMs = (int)(1000 / value);
+            }
+        }
+        private float speed = 1;
+        private int timeThresholdInMs = 1000;
+        private int currentTime;
+
         public Direction Direction
         {
             get => currentDirection;
@@ -27,7 +38,7 @@ namespace PythonIsGame.Common
             }
         }
         protected Direction currentDirection;
-        protected Direction previousStepDirection;
+        private Direction previousStepDirection;
 
         public SnakeHead Head { get; private set; }
         protected LinkedList<SnakeBody> tail = new LinkedList<SnakeBody>();
@@ -40,16 +51,30 @@ namespace PythonIsGame.Common
             previousStepDirection = currentDirection = Direction.None;
             this.map = map;
             map.AddEntity(Head, chunkFollow);
+            Speed = 16f;
         }
 
-        public virtual void Update()
+        public virtual void Update(TimeSpan delta)
         {
-            if (Alive)
-                StepTo(currentDirection);
+            if (!Alive)
+                return;
+            currentTime += delta.Milliseconds;
+            if (currentTime > timeThresholdInMs)
+            {
+                currentTime = 0;
+                Step();
+            }
+        }
+
+        protected virtual void Step()
+        {
+            StepTo(currentDirection);
         }
 
         public void StepTo(Direction direction)
         {
+            if (!CanTurn(Direction))
+                return;
             if (tail.Count > 0)
             {
                 var t = tail.Last;
@@ -63,6 +88,14 @@ namespace PythonIsGame.Common
         }
 
         public void AddTailSegment()
+        {
+            var delta = GetDeltaPointBy(currentDirection);
+            var body = new SnakeBody(Head.Position.X - delta.X, Head.Position.Y - delta.Y);
+            tail.AddLast(body);
+            map.AddEntity(body, false);
+        }
+
+        public void RemoveTailSegment()
         {
             var delta = GetDeltaPointBy(currentDirection);
             var body = new SnakeBody(Head.Position.X - delta.X, Head.Position.Y - delta.Y);

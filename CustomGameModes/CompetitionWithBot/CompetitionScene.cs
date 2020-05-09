@@ -48,9 +48,9 @@ namespace CustomGameModes.CompetitionWithBot
 
         public override void Update(TimeSpan delta)
         {
+            bot.Update(delta);
             camera.TargetPosition = new Point(player.X - (int)(Width / (2 * camera.Scale)), player.Y - (int)(Height / (2 * camera.Scale)));
             camera.Update();
-            bot.Update(delta);
         }
 
         private void GameOver(string message, bool isWin)
@@ -67,7 +67,7 @@ namespace CustomGameModes.CompetitionWithBot
         private void StepInDirection(Direction direction)
         {
             player.Direction = direction;
-            player.Update();
+            player.StepTo(direction);
             map.Update();
         }
 

@@ -1,11 +1,6 @@
 ﻿using NUnit.Framework;
 using PythonIsGame.Common;
 using PythonIsGame.Common.Map;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PythonIsGame.Tests
 {
@@ -55,11 +50,11 @@ namespace PythonIsGame.Tests
         {
             var player = new Snake(0, 0, EmptyMap, "player");
             player.Direction = Direction.Right;
-            player.Update();
+            player.StepTo(player.Direction);
             player.Direction = Direction.Up;
             player.Direction = Direction.Down;
             player.Direction = Direction.Left;
-            player.Update();
+            player.StepTo(player.Direction);
             Assert.AreEqual(1, player.X);
             Assert.AreEqual(1, player.Y);
             Assert.AreEqual(Direction.Down, player.Direction);
@@ -71,7 +66,7 @@ namespace PythonIsGame.Tests
             foreach (var direction in directions)
             {
                 player.Direction = direction;
-                player.Update();
+                player.StepTo(player.Direction);
             }
             Assert.AreEqual(expectedX, player.X);
             Assert.AreEqual(expectedY, player.Y);
