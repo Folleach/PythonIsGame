@@ -7,7 +7,6 @@ namespace PythonIsGame.Common.Entities
         public SnakeHead(int x, int y)
         {
             Position = new Point(x, y);
-            Color = Color.FromArgb(104, 237, 94);
         }
     }
 }

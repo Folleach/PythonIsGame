@@ -61,11 +61,10 @@ namespace ClassicSnake
         private void IntersectWithFood(PositionMaterial obj)
         {
             var apple = obj.Material as AppleMaterial;
-            player.Score += apple.NutritionalValue;
+            apple.IntersectedWithSnake(player);
             map.RemoveMaterial(obj.Position);
             map.SetMaterial(new AppleMaterial(), GetRandomPointInArea());
             scoreboard.Text = "Очки: " + player.Score;
-            player.AddTailSegment();
         }
 
         private Point GetRandomPointInArea()

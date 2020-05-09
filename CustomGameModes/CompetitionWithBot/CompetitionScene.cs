@@ -84,7 +84,7 @@ namespace CustomGameModes.CompetitionWithBot
         {
             base.Draw(graphics);
             foreach (var obj in bot)
-                graphics.FillRectangle(GetBrush(obj.Color), new Rectangle(obj.Position, DefaultSize));
+                graphics.FillRectangle(GetBrush(colorMapping[obj.GetType()]), new Rectangle(obj.Position, DefaultSize));
         }
 
         private Point GetRandomPoint()

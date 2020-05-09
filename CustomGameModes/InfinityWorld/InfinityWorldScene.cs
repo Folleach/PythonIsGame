@@ -48,19 +48,6 @@ namespace CustomGameModes.InfinityWorld
             map.Update();
         }
 
-        public override void Draw(Graphics graphics)
-        {
-            base.Draw(graphics);
-            foreach (var obj in map.GetMaterials())
-            {
-                graphics.FillRectangle(GetBrush(obj.Item1.Color), new Rectangle(obj.Item2, DefaultSize));
-            }
-            foreach (var obj in player)
-            {
-                graphics.FillRectangle(GetBrush(obj.Color), new Rectangle(obj.Position, DefaultSize));
-            }
-        }
-
         private void GameOver(SceneManager ownerManager)
         {
             ownerManager.ReplaceScene(new GameOverScene(), new GameOverModel()

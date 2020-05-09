@@ -9,6 +9,5 @@ namespace PythonIsGame.Common
 {
     public interface IMaterial
     {
-        Color Color { get; set; }
     }
 }

@@ -9,6 +9,5 @@ namespace PythonIsGame.Common.Materials
 {
     public class WallMaterial : IMaterial
     {
-        public Color Color { get; set; } = Color.FromArgb(18, 13, 20);
     }
 }

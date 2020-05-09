@@ -21,7 +21,7 @@ namespace CustomGameModes.WithTeleports
             KeyDownHandlers[Keys.W] = e => player.Direction = Direction.Up;
             KeyDownHandlers[Keys.D] = e => player.Direction = Direction.Right;
             KeyDownHandlers[Keys.S] = e => player.Direction = Direction.Down;
-            for (var i = 0; i < 16; i++)
+            for (var i = 0; i < 222; i++)
                 player.AddTailSegment();
         }
 
