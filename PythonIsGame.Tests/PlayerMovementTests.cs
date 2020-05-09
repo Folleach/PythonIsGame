@@ -50,6 +50,21 @@ namespace PythonIsGame.Tests
             HeadMove(10, 3, 10, 3, Direction.None, Direction.None, Direction.None);
         }
 
+        [Test]
+        public void DoubleChangeDirection_SnakeShouldNotTurnToBack()
+        {
+            var player = new Snake(0, 0, EmptyMap, "player");
+            player.Direction = Direction.Right;
+            player.Update();
+            player.Direction = Direction.Up;
+            player.Direction = Direction.Down;
+            player.Direction = Direction.Left;
+            player.Update();
+            Assert.AreEqual(1, player.X);
+            Assert.AreEqual(1, player.Y);
+            Assert.AreEqual(Direction.Down, player.Direction);
+        }
+
         public void HeadMove(int x, int y, int expectedX, int expectedY, params Direction[] directions)
         {
             var player = new Snake(x, y, EmptyMap, "player");
@@ -58,8 +73,8 @@ namespace PythonIsGame.Tests
                 player.Direction = direction;
                 player.Update();
             }
-            Assert.AreEqual(player.X, expectedX);
-            Assert.AreEqual(player.Y, expectedY);
+            Assert.AreEqual(expectedX, player.X);
+            Assert.AreEqual(expectedY, player.Y);
         }
     }
 }

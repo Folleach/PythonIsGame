@@ -3,9 +3,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PythonIsGame.Common
 {
@@ -24,6 +21,7 @@ namespace PythonIsGame.Common
             }
         }
         protected Direction direction;
+        protected Direction previousStepDirection;
 
         public SnakeHead Head { get; private set; }
         protected LinkedList<SnakeBody> tail = new LinkedList<SnakeBody>();
@@ -36,7 +34,7 @@ namespace PythonIsGame.Common
         {
             Name = name;
             Head = new SnakeHead(x, y);
-            direction = Direction.None;
+            previousStepDirection = direction = Direction.None;
             this.map = map;
             map.AddEntity(Head, chunkFollow);
         }
@@ -52,6 +50,7 @@ namespace PythonIsGame.Common
             }
             var delta = GetDeltaPointBy(Head.Position, direction);
             Head.Position = new Point(Head.Position.X + delta.X, Head.Position.Y + delta.Y);
+            previousStepDirection = direction;
         }
 
         public void AddTailSegment()
@@ -60,7 +59,6 @@ namespace PythonIsGame.Common
             var body = new SnakeBody(Head.Position.X - delta.X, Head.Position.Y - delta.Y);
             tail.AddLast(body);
             map.AddEntity(body, false);
-
         }
 
         public IEnumerator<IEntity> GetEnumerator()
@@ -77,10 +75,10 @@ namespace PythonIsGame.Common
 
         private bool CanTurn(Direction to)
         {
-            return (to == Direction.Left && direction != Direction.Right)
-                || (to == Direction.Up && direction != Direction.Down)
-                || (to == Direction.Right && direction != Direction.Left)
-                || (to == Direction.Down && direction != Direction.Up);
+            return (to == Direction.Left && previousStepDirection != Direction.Right)
+                || (to == Direction.Up && previousStepDirection != Direction.Down)
+                || (to == Direction.Right && previousStepDirection != Direction.Left)
+                || (to == Direction.Down && previousStepDirection != Direction.Up);
         }
 
         private Point GetDeltaPointBy(Point point, Direction direction)
