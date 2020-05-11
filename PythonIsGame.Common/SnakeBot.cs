@@ -35,6 +35,7 @@ namespace PythonIsGame.Common
                     map.Update();
                 }
                 StepTo(currentDirection);
+                return;
             }
             Direction = directions.First.Value;
             directions.RemoveFirst();
