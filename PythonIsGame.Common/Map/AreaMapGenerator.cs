@@ -11,20 +11,17 @@ namespace PythonIsGame.Common.Map
         private int Up;
         private int Right;
         private int Bottom;
-        private bool Fill;
 
-        public AreaMapGenerator(int left, int up, int right, int bottom, bool fill = false)
+        public AreaMapGenerator(int left, int up, int right, int bottom)
         {
             Left = left;
             Up = up;
             Right = right;
             Bottom = bottom;
-            Fill = fill;
         }
 
         public Chunk Generate(Point chunkPosition)
         {
-            var lineWidth = 3;
             var chunk = new Chunk(chunkPosition.X, chunkPosition.Y, ChunkSize);
             for (var x = 0; x < ChunkSize; x++)
             {
@@ -32,22 +29,10 @@ namespace PythonIsGame.Common.Map
                 {
                     var absoluteX = chunkPosition.X * ChunkSize + x;
                     var absoluteY = chunkPosition.Y * ChunkSize + y;
-                    if (!Fill)
-                    {
-                        if ((absoluteX < Left && absoluteX >= Left - lineWidth)
-                            || (absoluteX > Right && absoluteX <= Right + lineWidth)
-                            || (absoluteY < Up && absoluteY >= Up - lineWidth)
-                            || (absoluteY > Bottom && absoluteY <= Bottom + lineWidth))
-                            chunk.SetMaterial(new Point(x, y), new WallMaterial());
-                    }
-                    else
-                    {
-                        if ((absoluteX < Left)
-                            || (absoluteX > Right)
-                            || (absoluteY < Up)
-                            || (absoluteY > Bottom))
-                            chunk.SetMaterial(new Point(x, y), new WallMaterial());
-                    }
+                    if ((absoluteX == Left || absoluteX == Right) && absoluteY >= Up && absoluteY <= Bottom)
+                        chunk.SetMaterial(new Point(x, y), new TeleportMaterial(new Point(absoluteX == Left ? Right - 1 : 1, y)));
+                    if ((absoluteY == Up || absoluteY == Bottom) && absoluteX > Left && absoluteX < Right)
+                        chunk.SetMaterial(new Point(x, y), new TeleportMaterial(new Point(x, absoluteY == Up ? Bottom - 1 : 1)));
                 }
             }
             return chunk;

@@ -13,6 +13,8 @@ namespace PythonIsGame.Common
         public int X => Head.Position.X;
         public int Y => Head.Position.Y;
 
+        public event Action<Snake, Direction> Stepped;
+
         public bool Alive { get; private set; } = true;
 
         public float Speed
@@ -85,6 +87,7 @@ namespace PythonIsGame.Common
             var delta = GetDeltaPointBy(direction);
             Head.Position = new Point(Head.Position.X + delta.X, Head.Position.Y + delta.Y);
             previousStepDirection = direction;
+            Stepped?.Invoke(this, direction);
         }
 
         public void AddTailSegment()

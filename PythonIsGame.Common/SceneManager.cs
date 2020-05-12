@@ -12,6 +12,7 @@ namespace PythonIsGame.Common
     {
         private Stack<Scene> scenes = new Stack<Scene>();
         public event Action<SceneManager, Scene> SceneReplaced;
+        public event Action<SceneManager, Scene> SceneInitializing;
 
         public Scene Current()
         {
@@ -20,6 +21,7 @@ namespace PythonIsGame.Common
 
         public void PushScene(Scene scene, object data)
         {
+            SceneInitializing?.Invoke(this, scene);
             scene.Create(this, data);
             scenes.Push(scene);
             SceneReplaced?.Invoke(this, scene);

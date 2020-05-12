@@ -32,10 +32,17 @@ namespace PythonIsGame
             timer.Tick += Update;
             Scenes = new SceneManager();
             Scenes.SceneReplaced += this.Scenes_SceneReplaced;
+            Scenes.SceneInitializing += this.Scenes_SceneInitializing;
             Scenes.PushScene(new MainMenuScene(), null);
             InitializeComponent();
             timer.Start();
             deltaTime = Stopwatch.StartNew();
+        }
+
+        private void Scenes_SceneInitializing(SceneManager manager, Scene scene)
+        {
+            scene.Root.Width = this.Width;
+            scene.Root.Height = this.Height;
         }
 
         private void Scenes_SceneReplaced(SceneManager manager, Scene scene)
