@@ -1,10 +1,5 @@
-﻿using PythonIsGame.Common;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace PythonIsGame.Common
 {
@@ -13,9 +8,12 @@ namespace PythonIsGame.Common
         private Stack<Scene> scenes = new Stack<Scene>();
         public event Action<SceneManager, Scene> SceneReplaced;
         public event Action<SceneManager, Scene> SceneInitializing;
+        public int Count => scenes.Count;
 
         public Scene Current()
         {
+            if (scenes.Count == 0)
+                return null;
             return scenes.Peek();
         }
 
