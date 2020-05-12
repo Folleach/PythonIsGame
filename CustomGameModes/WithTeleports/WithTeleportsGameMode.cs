@@ -6,6 +6,8 @@ namespace CustomGameModes.WithTeleports
     {
         public string GameModeName { get; } = "Демка с телепортами";
 
+        public int Order { get; } = 10;
+
         public Scene CreateGameScene()
         {
             return new WithTeleportsScene();

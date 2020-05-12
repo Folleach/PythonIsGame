@@ -6,6 +6,8 @@ namespace CustomGameModes.InfinityWorld
     {
         public string GameModeName { get; } = "Бесконечный мир";
 
+        public int Order { get; } = 2;
+
         public Scene CreateGameScene()
         {
             return new ChoiceSeedScene();

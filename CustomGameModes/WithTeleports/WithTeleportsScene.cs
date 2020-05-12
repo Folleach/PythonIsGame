@@ -4,7 +4,6 @@ using PythonIsGame.Common.Materials;
 using PythonIsGame.Common.Scenes;
 using System;
 using System.Drawing;
-using System.Windows.Forms;
 
 namespace CustomGameModes.WithTeleports
 {

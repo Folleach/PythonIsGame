@@ -3,6 +3,7 @@ using PythonIsGame.Common.UI;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace PythonIsGame
@@ -18,7 +19,7 @@ namespace PythonIsGame
             modificationLoader = new ModificationLoader();
             titleLabel.Text = "Python is game";
             AddControl(titleLabel);
-            foreach (var item in modificationLoader)
+            foreach (var item in modificationLoader.OrderBy(x => x.Order))
             {
                 var gameModeButton = new Button()
                 {

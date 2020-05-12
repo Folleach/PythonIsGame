@@ -6,6 +6,8 @@ namespace CustomGameModes.CompetitionWithBot
     {
         public string GameModeName { get; } = "Соревнование с ботом";
 
+        public int Order { get; } = 3;
+
         public Scene CreateGameScene()
         {
             return new CompetitionScene();
