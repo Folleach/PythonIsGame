@@ -11,11 +11,14 @@ namespace PythonIsGame
     public class MainMenuScene : Scene
     {
         private DrawLabel titleLabel = new DrawLabel(32, false);
+        private DrawPictureBox pictureBox = new DrawPictureBox();
+        private static Image snakeMainMenuImage = Image.FromFile("Images/snake_mainmenu.png");
         private List<Button> playButtons = new List<Button>();
         private ModificationLoader modificationLoader;
 
         public override void Create(SceneManager ownerManager, object data)
         {
+            base.Create(ownerManager, data);
             modificationLoader = new ModificationLoader();
             titleLabel.Text = "Python is game";
             AddControl(titleLabel);
@@ -29,19 +32,27 @@ namespace PythonIsGame
                 playButtons.Add(gameModeButton);
                 AddControl(gameModeButton);
             }
-            KeyDownHandlers.Add(Keys.Escape, e => ownerManager.RemoveScene());
+            pictureBox.Image = snakeMainMenuImage;
+            pictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
+            AddControl(pictureBox);
         }
 
         public override void Resize()
         {
             titleLabel.Width = Width;
             titleLabel.Height = 50;
-            if (Width > 450)
-            {
-                //TODO: _
-            }
             var btnTop = 60;
             var btnWidth = Math.Max(Width / 3, 200);
+            if (Width > 450)
+            {
+                pictureBox.Visible = true;
+                pictureBox.Width = Width - btnWidth - 150;
+                pictureBox.Height = (int)(pictureBox.Width * ((float)snakeMainMenuImage.Height / snakeMainMenuImage.Width));
+                pictureBox.Left = btnWidth + 50;
+                pictureBox.Top = btnTop;
+            }
+            else
+                pictureBox.Visible = false;
             foreach (var playButton in playButtons)
             {
                 playButton.Top = btnTop;
