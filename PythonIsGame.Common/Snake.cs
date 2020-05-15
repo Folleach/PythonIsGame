@@ -7,13 +7,26 @@ namespace PythonIsGame.Common
 {
     public class Snake
     {
-        public int Score = 0;
+        
+        public int Score
+        {
+            get => score;
+            set
+            {
+                score = value;
+                ScoreChanged?.Invoke(this, value);
+            }
+        }
+        private int score = 0;
         public readonly string Name;
 
         public int X => Head.Position.X;
         public int Y => Head.Position.Y;
 
         public event Action<Snake, Direction> Stepped;
+        public event Action<Snake> Died;
+        public event Action<Snake, int> ScoreChanged;
+        public event Action<Snake, float> SpeedChanged;
 
         public bool Alive { get; private set; } = true;
 
@@ -24,6 +37,7 @@ namespace PythonIsGame.Common
             {
                 speed = value;
                 timeThresholdInMs = (int)(1000 / value);
+                SpeedChanged?.Invoke(this, value);
             }
         }
         private float speed = 1;
@@ -113,6 +127,7 @@ namespace PythonIsGame.Common
             Alive = false;
             tail = null;
             Head = null;
+            Died?.Invoke(this);
         }
 
         public IEnumerable<IEntity> GetEntities()

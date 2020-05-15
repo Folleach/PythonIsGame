@@ -32,10 +32,12 @@ namespace ClassicSnake
             player = new Snake(2, 2, map, "player", true);
             player.Speed = 8;
             player.Stepped += (s, d) => map.Update();
+            player.Died += s => GameOver("Игра окончена");
+            player.ScoreChanged += (sender, score) => scoreboard.Text = "Очки: " + sender.Score;
             map.AddEntity(player.Head, true);
             map.RegisterIntersectionWithMaterial(player.Head, typeof(TeleportMaterial), m => (m.Material as TeleportMaterial).Teleport(player.Head));
             map.RegisterIntersectionWithMaterial(player.Head, typeof(AppleMaterial), IntersectWithFood);
-            map.RegisterIntersectionWithEntity(player.Head, typeof(SnakeBody), entity => GameOver("Укусил себя и умер..."));
+            map.RegisterIntersectionWithEntity(player.Head, typeof(SnakeBody), e => player.Kill());
             colorMapping[typeof(TeleportMaterial)] = GameColors.WallMaterialColor;
             scoreboard.Width = 180;
             AddControl(scoreboard);
@@ -63,7 +65,6 @@ namespace ClassicSnake
             apple.IntersectedWithSnake(player);
             map.RemoveMaterial(obj.Position);
             map.SetMaterial(new AppleMaterial(), mapGenerator.GetRandomPointInArea());
-            scoreboard.Text = "Очки: " + player.Score;
         }
     }
 }

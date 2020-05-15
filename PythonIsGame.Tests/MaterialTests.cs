@@ -32,5 +32,18 @@ namespace PythonIsGame.Tests
             Assert.AreEqual(33, player.X);
             Assert.AreEqual(-9, player.Y);
         }
+
+        [Test]
+        public void WallTest_SnakeMustBeDie()
+        {
+            var player = new Snake(33, -9, TestHelpers.EmptyMap, "");
+            var wallMaterial = new WallMaterial();
+
+            player.Died += s => Assert.Pass("Player was killed.");
+
+            wallMaterial.IntersectedWithSnake(player);
+
+            Assert.Fail("Player was not killed.");
+        }
     }
 }
