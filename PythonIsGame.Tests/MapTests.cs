@@ -76,6 +76,52 @@ namespace PythonIsGame.Tests
             Assert.AreEqual(1, map.GetEntities().Count());
         }
 
+        [Test]
+        public void TestOnIntersectionAxis()
+        {
+            var mapGenerator = new AxisMapGenerator();
+
+            int FromX = -500, FromY = -500;
+            int ToX = 500, ToY = 500;
+
+            var random = new Random(82881285);
+
+            for (var x = FromX; x < ToX; x++)
+            {
+                for (var y = FromY; y < ToY; y++)
+                {
+                    if (random.Next(2) == 1)
+                        mapGenerator.PointsOfWalls.Add(new Point(x, y));
+                }
+            }
+
+            var map = new ChunkedMap(mapGenerator);
+            var player = new Snake(0, 0, map, "player", true);
+            var p = new Point(-500, -384);
+            void Intersect(PositionMaterial material)
+            {
+                if (material.Position == p)
+                {
+
+                }
+                if (player.Head.Position != material.Position)
+                    Assert.Fail($"Diffirent position ({player.Head.Position} and {material.Position})");
+                if (!mapGenerator.PointsOfWalls.Contains(player.Head.Position))
+                    Assert.Fail($"Phantom material on {player.Head.Position}");
+            }
+
+            map.RegisterIntersectionWithMaterial(player.Head, typeof(WallMaterial), Intersect);
+
+            for (var x = FromX; x < ToX; x++)
+            {
+                for (var y = FromY; y < ToY; y++)
+                {
+                    player.Head.Position = new Point(x, y);
+                    map.Update();
+                }
+            }
+        }
+
         public void MaterialSet(IMaterial material, Point point)
         {
             var map = TestHelpers.EmptyMap;
@@ -91,6 +137,28 @@ namespace PythonIsGame.Tests
             foreach (var material in materials)
                 map.SetMaterial(material.Item1, material.Item2);
             Assert.AreEqual(expectedCount, map.GetMaterials().Count());
+        }
+
+        private class AxisMapGenerator : IMapGenerator
+        {
+            public int ChunkSize => 64;
+
+            public HashSet<Point> PointsOfWalls = new HashSet<Point>();
+
+            public Chunk Generate(Point chunkPosition)
+            {
+                var chunk = new Chunk(chunkPosition.X, chunkPosition.Y, ChunkSize);
+                for (var x = 0; x < ChunkSize; x++)
+                {
+                    for (var y = 0; y < ChunkSize; y++)
+                    {
+                        var absolute = chunk.GetAbsolutePoint(x, y);
+                        if (PointsOfWalls.Contains(absolute))
+                            chunk.SetMaterial(new Point(x, y), new WallMaterial());
+                    }
+                }
+                return chunk;
+            }
         }
     }
 }

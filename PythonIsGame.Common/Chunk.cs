@@ -50,7 +50,7 @@ namespace PythonIsGame.Common
             }
         }
 
-        private Point GetAbsolutePoint(int x, int y)
+        public Point GetAbsolutePoint(int x, int y)
         {
             return new Point(ChunkPositionX * chunkSize + x, ChunkPositionY * chunkSize + y);
         }

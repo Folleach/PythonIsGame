@@ -184,18 +184,19 @@ namespace PythonIsGame.Common.Map
 
         private Point GetChunkPosition(Point absolutePosition)
         {
+            var localPos = GetPositionInChunk(absolutePosition);
             if (absolutePosition.X < 0)
-                absolutePosition.X -= Generator.ChunkSize;
+                absolutePosition.X -= Generator.ChunkSize + localPos.X - 1;
             if (absolutePosition.Y < 0)
-                absolutePosition.Y -= Generator.ChunkSize;
+                absolutePosition.Y -= Generator.ChunkSize + localPos.Y - 1;
             return new Point(absolutePosition.X / Generator.ChunkSize,
                 absolutePosition.Y / Generator.ChunkSize);
         }
 
-        private Point GetPositionInChunk(Point absoulePosition)
+        private Point GetPositionInChunk(Point absolutePosition)
         {
-            return new Point(ValueMapping(absoulePosition.X, Generator.ChunkSize),
-                ValueMapping(absoulePosition.Y, Generator.ChunkSize));
+            return new Point(ValueMapping(absolutePosition.X, Generator.ChunkSize),
+                ValueMapping(absolutePosition.Y, Generator.ChunkSize));
         }
 
         private void GenerateChunkIfNotExists(Point position)
