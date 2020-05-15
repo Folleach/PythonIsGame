@@ -21,6 +21,8 @@ namespace CustomGameModes.CompetitionWithBot
         private int Right = 60;
         private int Bottom = 30;
 
+        private AreaMapGenerator mapGenerator;
+
         private SnakeBot bot;
         private SceneManager sceneManager;
 
@@ -28,7 +30,7 @@ namespace CustomGameModes.CompetitionWithBot
         {
             sceneManager = ownerManager;
             base.Create(ownerManager, data);
-            map = new ChunkedMap(new AreaMapGenerator(Left, Up, Right, Bottom));
+            map = new ChunkedMap(mapGenerator = new AreaMapGenerator(Left, Up, Right, Bottom));
             player = new Snake(2, 2, map, "player", true);
             InitializeBot();
             map.RegisterIntersectionWithMaterial(player.Head, typeof(AppleMaterial), m => IntersectWithFood(player, m));
@@ -39,7 +41,7 @@ namespace CustomGameModes.CompetitionWithBot
             KeyDownHandlers[Keys.D] = e => StepInDirection(Direction.Right);
             KeyDownHandlers[Keys.S] = e => StepInDirection(Direction.Down);
             map.Update();
-            map.SetMaterial(new AppleMaterial(), new Point(11, 11));
+            map.SetMaterial(new AppleMaterial(), mapGenerator.GetRandomPointInArea());
         }
 
         public override void Update(TimeSpan delta)
@@ -62,7 +64,7 @@ namespace CustomGameModes.CompetitionWithBot
 
         private void InitializeBot()
         {
-            var pos = GetRandomPoint();
+            var pos = mapGenerator.GetRandomPointInArea();
             bot = new SnakeBot(pos.X, pos.Y, map, "bot");
             bot.Speed = 2000;
             map.RegisterIntersectionWithMaterial(bot.Head, typeof(AppleMaterial), m => IntersectWithFood(bot, m));
@@ -91,7 +93,7 @@ namespace CustomGameModes.CompetitionWithBot
             var apple = obj.Material as AppleMaterial;
             snake.Score += apple.NutritionalValue;
             map.RemoveMaterial(obj.Position);
-            map.SetMaterial(new AppleMaterial(), GetRandomPoint());
+            map.SetMaterial(new AppleMaterial(), mapGenerator.GetRandomPointInArea());
             snake.AddTailSegment();
         }
 
@@ -100,12 +102,6 @@ namespace CustomGameModes.CompetitionWithBot
             base.Draw(graphics);
             foreach (var obj in bot.GetEntities())
                 graphics.FillRectangle(GetBrush(colorMapping[obj.GetType()]), new Rectangle(obj.Position, DefaultSize));
-        }
-
-        private Point GetRandomPoint()
-        {
-            var random = new Random();
-            return new Point(Left + random.Next(Right - Left), Up + random.Next(Bottom - Up));
         }
     }
 }

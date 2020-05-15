@@ -1,4 +1,5 @@
 ﻿using PythonIsGame.Common.Materials;
+using System;
 using System.Drawing;
 
 namespace PythonIsGame.Common.Map
@@ -11,13 +12,17 @@ namespace PythonIsGame.Common.Map
         private int Up;
         private int Right;
         private int Bottom;
+        private bool WallIsTeleport;
 
-        public AreaMapGenerator(int left, int up, int right, int bottom)
+        private Random random = new Random();
+
+        public AreaMapGenerator(int left, int up, int right, int bottom, bool wallIsTeleport = false)
         {
             Left = left;
             Up = up;
             Right = right;
             Bottom = bottom;
+            WallIsTeleport = wallIsTeleport;
         }
 
         public Chunk Generate(Point chunkPosition)
@@ -30,12 +35,17 @@ namespace PythonIsGame.Common.Map
                     var absoluteX = chunkPosition.X * ChunkSize + x;
                     var absoluteY = chunkPosition.Y * ChunkSize + y;
                     if ((absoluteX == Left || absoluteX == Right) && absoluteY >= Up && absoluteY <= Bottom)
-                        chunk.SetMaterial(new Point(x, y), new TeleportMaterial(new Point(absoluteX == Left ? Right - 1 : 1, y)));
+                        chunk.SetMaterial(new Point(x, y), WallIsTeleport ? (IMaterial)new TeleportMaterial(new Point(absoluteX == Left ? Right - 1 : 1, y)) : new WallMaterial());
                     if ((absoluteY == Up || absoluteY == Bottom) && absoluteX > Left && absoluteX < Right)
-                        chunk.SetMaterial(new Point(x, y), new TeleportMaterial(new Point(x, absoluteY == Up ? Bottom - 1 : 1)));
+                        chunk.SetMaterial(new Point(x, y), WallIsTeleport ? (IMaterial)new TeleportMaterial(new Point(x, absoluteY == Up ? Bottom - 1 : 1)) : new WallMaterial());
                 }
             }
             return chunk;
+        }
+
+        public Point GetRandomPointInArea()
+        {
+            return new Point(1 + (random.Next() % (Right - 2)), 1 + (random.Next() % (Bottom - 2)));
         }
     }
 }
