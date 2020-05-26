@@ -42,6 +42,7 @@ namespace ClassicSnake
             scoreboard.Width = 180;
             AddControl(scoreboard);
             map.SetMaterial(new AppleMaterial(), mapGenerator.GetRandomPointInArea());
+            gradient = true;
         }
 
         public override void Update(TimeSpan delta)
@@ -65,6 +66,7 @@ namespace ClassicSnake
             apple.IntersectedWithSnake(player);
             map.RemoveMaterial(obj.Position);
             map.SetMaterial(new AppleMaterial(), mapGenerator.GetRandomPointInArea());
+            PlaySound("Sounds/hit.wav");
         }
     }
 }

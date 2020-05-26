@@ -59,6 +59,7 @@ namespace CustomGameModes.InfinityWorld
             player.Score += apple.NutritionalValue;
             map.RemoveMaterial(obj.Position);
             player.AddTailSegment();
+            PlaySound("Sounds/hit.wav");
         }
     }
 }

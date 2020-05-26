@@ -66,7 +66,7 @@ namespace CustomGameModes.CompetitionWithBot
         {
             var pos = mapGenerator.GetRandomPointInArea();
             bot = new SnakeBot(pos.X, pos.Y, map, "bot");
-            bot.Speed = 2000;
+            bot.Speed = 16;
             map.RegisterIntersectionWithMaterial(bot.Head, typeof(AppleMaterial), m => IntersectWithFood(bot, m));
             map.RegisterIntersectionWithMaterial(bot.Head, typeof(WallMaterial), m => KillBot());
             map.RegisterIntersectionWithEntity(bot.Head, typeof(SnakeBody), e => KillBot());

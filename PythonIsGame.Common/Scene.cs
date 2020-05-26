@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Media;
 using System.Windows.Forms;
 
 namespace PythonIsGame.Common
@@ -12,6 +13,16 @@ namespace PythonIsGame.Common
 
         public readonly DrawPanel Root = new DrawPanel();
 
+        public bool Active
+        {
+            get => active;
+            set
+            {
+                active = value;
+            }
+        }
+        private bool active;
+
         public int Width => Root.Width;
         public int Height => Root.Height;
 
@@ -19,6 +30,8 @@ namespace PythonIsGame.Common
             = new Dictionary<Keys, Action<KeyEventArgs>>();
 
         protected Dictionary<Color, SolidBrush> brushes = new Dictionary<Color, SolidBrush>();
+
+        private Dictionary<string, SoundPlayer> soundPlayers = new Dictionary<string, SoundPlayer>();
 
         public void AddControl(Control element)
         {
@@ -50,6 +63,13 @@ namespace PythonIsGame.Common
 
         public virtual void Resize()
         {
+        }
+
+        protected void PlaySound(string file)
+        {
+            if (!soundPlayers.ContainsKey(file))
+                soundPlayers.Add(file, new SoundPlayer(file));
+            soundPlayers[file].Play();
         }
 
         protected Brush GetBrush(Color color)

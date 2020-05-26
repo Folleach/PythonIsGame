@@ -51,6 +51,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BigramsTests.cs" />
     <Compile Include="MapTests.cs" />
     <Compile Include="MaterialTests.cs" />
     <Compile Include="PlayerEventsTests.cs" />

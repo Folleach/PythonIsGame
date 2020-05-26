@@ -100,10 +100,6 @@ namespace PythonIsGame.Tests
             var p = new Point(-500, -384);
             void Intersect(PositionMaterial material)
             {
-                if (material.Position == p)
-                {
-
-                }
                 if (player.Head.Position != material.Position)
                     Assert.Fail($"Diffirent position ({player.Head.Position} and {material.Position})");
                 if (!mapGenerator.PointsOfWalls.Contains(player.Head.Position))
