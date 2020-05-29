@@ -47,8 +47,17 @@ namespace CustomGameModes.CompetitionWithBot
         public override void Update(TimeSpan delta)
         {
             bot.Update(delta);
-            camera.TargetPosition = new Point(player.X - (int)(Width / (2 * camera.Scale)), player.Y - (int)(Height / (2 * camera.Scale)));
+            var halfWidth = (int)(Width / (2 * camera.Scale));
+            var halfHeight = (int)(Height / (2 * camera.Scale));
+            camera.TargetPosition = new PointF(
+                GetInsideValue(player.Position.X - halfWidth, Left, Right - halfWidth * 2 + 1),
+                GetInsideValue(player.Position.Y - halfHeight, Up, Bottom - halfHeight * 2 + 2));
             camera.Update();
+        }
+
+        private float GetInsideValue(float value, int x, int width)
+        {
+            return Math.Max(x, Math.Min(value, width));
         }
 
         private void GameOver(string message, bool isWin)

@@ -4,6 +4,7 @@ using System.Drawing;
 
 namespace PythonIsGame.Common
 {
+    [Serializable]
     public class Chunk
     {
         public int ChunkPositionX { get; private set; }

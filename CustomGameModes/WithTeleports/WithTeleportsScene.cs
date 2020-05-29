@@ -23,7 +23,7 @@ namespace CustomGameModes.WithTeleports
         public override void Update(TimeSpan delta)
         {
             player.Update(delta);
-            camera.TargetPosition = new Point(player.X - (int)(Width / (2 * camera.Scale)), player.Y - (int)(Height / (2 * camera.Scale)));
+            camera.TargetPosition = new Point(player.Position.X - (int)(Width / (2 * camera.Scale)), player.Position.Y - (int)(Height / (2 * camera.Scale)));
             camera.Update();
             map.Update();
         }

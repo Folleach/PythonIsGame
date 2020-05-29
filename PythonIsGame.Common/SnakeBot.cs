@@ -29,7 +29,7 @@ namespace PythonIsGame.Common
                 var rand = new Random();
                 var dir = (Direction)(1 + rand.Next(4));
                 var d = GetDeltaPointBy(dir);
-                if (CanStepTo(new Point(X + d.X, Y + d.Y)))
+                if (CanStepTo(new Point(Position.X + d.X, Position.Y + d.Y)))
                 {
                     StepTo(dir);
                     map.Update();
@@ -40,7 +40,7 @@ namespace PythonIsGame.Common
             Direction = directions.First.Value;
             directions.RemoveFirst();
             var delta = GetDeltaPointBy(currentDirection);
-            if (!CanStepTo(new Point(X + delta.X, Y + delta.Y)))
+            if (!CanStepTo(new Point(Position.X + delta.X, Position.Y + delta.Y)))
             {
                 directions.Clear();
                 return;

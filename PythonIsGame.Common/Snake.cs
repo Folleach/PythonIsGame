@@ -7,7 +7,6 @@ namespace PythonIsGame.Common
 {
     public class Snake
     {
-        
         public int Score
         {
             get => score;
@@ -20,8 +19,15 @@ namespace PythonIsGame.Common
         private int score = 0;
         public readonly string Name;
 
-        public int X => Head.Position.X;
-        public int Y => Head.Position.Y;
+        public Point Position
+        {
+            get => Head.Position;
+            set
+            {
+                MoveTailTo(Head.Position);
+                Head.Position = value;
+            }
+        }
 
         public event Action<Snake, Direction> Stepped;
         public event Action<Snake> Died;
@@ -91,20 +97,13 @@ namespace PythonIsGame.Common
         {
             if (!CanTurn(direction))
                 return;
-            if (tail.Count > 0)
-            {
-                var t = tail.Last;
-                tail.RemoveLast();
-                tail.AddFirst(t);
-                tail.First.Value.Position = Head.Position;
-            }
             var delta = GetDeltaPointBy(direction);
-            Head.Position = new Point(Head.Position.X + delta.X, Head.Position.Y + delta.Y);
+            Position = new Point(Head.Position.X + delta.X, Head.Position.Y + delta.Y);
             previousStepDirection = direction;
             Stepped?.Invoke(this, direction);
         }
 
-        public void AddTailSegment()
+        public virtual void AddTailSegment()
         {
             var delta = GetDeltaPointBy(currentDirection);
             var body = new SnakeBody(Head.Position.X - delta.X, Head.Position.Y - delta.Y);
@@ -112,12 +111,9 @@ namespace PythonIsGame.Common
             map.AddEntity(body, false);
         }
 
-        public void RemoveTailSegment()
+        public virtual void RemoveTailSegment()
         {
-            var delta = GetDeltaPointBy(currentDirection);
-            var body = new SnakeBody(Head.Position.X - delta.X, Head.Position.Y - delta.Y);
-            tail.AddLast(body);
-            map.AddEntity(body, false);
+            throw new NotImplementedException();
         }
 
         public void Kill()
@@ -161,6 +157,17 @@ namespace PythonIsGame.Common
                     return new Point(0, 1);
                 default:
                     return Point.Empty;
+            }
+        }
+
+        private void MoveTailTo(Point position)
+        {
+            if (tail.Count > 0)
+            {
+                var t = tail.Last;
+                tail.RemoveLast();
+                tail.AddFirst(t);
+                tail.First.Value.Position = position;
             }
         }
     }

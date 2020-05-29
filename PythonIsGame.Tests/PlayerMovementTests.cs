@@ -55,8 +55,8 @@ namespace PythonIsGame.Tests
             player.Direction = Direction.Down;
             player.Direction = Direction.Left;
             player.StepTo(player.Direction);
-            Assert.AreEqual(1, player.X);
-            Assert.AreEqual(1, player.Y);
+            Assert.AreEqual(1, player.Position.X);
+            Assert.AreEqual(1, player.Position.Y);
             Assert.AreEqual(Direction.Down, player.Direction);
         }
 
@@ -68,8 +68,8 @@ namespace PythonIsGame.Tests
                 player.Direction = direction;
                 player.StepTo(player.Direction);
             }
-            Assert.AreEqual(expectedX, player.X);
-            Assert.AreEqual(expectedY, player.Y);
+            Assert.AreEqual(expectedX, player.Position.X);
+            Assert.AreEqual(expectedY, player.Position.Y);
         }
     }
 }

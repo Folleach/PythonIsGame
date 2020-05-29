@@ -4,14 +4,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{C1E9FAA9-9319-4B15-8A94-39EB5F95E7ED}</ProjectGuid>
+    <ProjectGuid>{D3F0781F-2866-43F7-A888-3C75E5117821}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ClassicSnake</RootNamespace>
-    <AssemblyName>ClassicSnake</AssemblyName>
+    <RootNamespace>MultiplayerSnake</RootNamespace>
+    <AssemblyName>MultiplayerSnake</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -21,7 +22,6 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -30,6 +30,9 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <DebugSymbols>true</DebugSymbols>
@@ -52,6 +55,14 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Folleach.StreamNet.Client, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\source\repos\Folleach.StreamNet\Folleach.StreamNet.Client\bin\Debug\netstandard2.0\Folleach.StreamNet.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="Folleach.StreamNet.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\source\repos\Folleach.StreamNet\Folleach.StreamNet.Client\bin\Debug\netstandard2.0\Folleach.StreamNet.Common.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -64,21 +75,29 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ClassicSnake.cs" />
-    <Compile Include="ClassicSnakeMode.cs" />
+    <Compile Include="GameInitializeModel.cs" />
+    <Compile Include="MultiplayerGameMode.cs" />
+    <Compile Include="NetworkMap.cs" />
+    <Compile Include="NetworkMapGenerator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Scenes\ChoiceServerScene.cs" />
+    <Compile Include="Scenes\MultiplayerGameScene.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\MultiplayerSnake.Models\MultiplayerSnake.Models.csproj">
+      <Project>{EE45E923-98BD-44CE-902E-B0AFF08CC062}</Project>
+      <Name>MultiplayerSnake.Models</Name>
+    </ProjectReference>
     <ProjectReference Include="..\PythonIsGame.Common\PythonIsGame.Common.csproj">
-      <Project>{78551DB9-12FE-4D3B-879B-B63AB57CD9DC}</Project>
+      <Project>{78551db9-12fe-4d3b-879b-b63ab57cd9dc}</Project>
       <Name>PythonIsGame.Common</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>MOVE /Y "$(TargetDir)$(TargetName)$(TargetExt)" "$(ProjectDir)..\PythonIsGame\bin\Debug\Modifications\$(TargetName)$(TargetExt)"</PostBuildEvent>
+    <PreBuildEvent>if not exist "$(ProjectDir)..\PythonIsGame\bin\Debug\Modifications" mkdir "$(ProjectDir)..\PythonIsGame\bin\Debug\Modifications"</PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
-    <PreBuildEvent>if not exist "$(ProjectDir)..\PythonIsGame\bin\Debug\Modifications" mkdir "$(ProjectDir)..\PythonIsGame\bin\Debug\Modifications"</PreBuildEvent>
+    <PostBuildEvent>MOVE /Y "$(TargetDir)$(TargetName)$(TargetExt)" "$(ProjectDir)..\PythonIsGame\bin\Debug\Modifications\$(TargetName)$(TargetExt)"</PostBuildEvent>
   </PropertyGroup>
 </Project>

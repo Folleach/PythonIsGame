@@ -1,7 +1,9 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 
 namespace PythonIsGame.Common.Entities
 {
+    [Serializable]
     public class SnakeHead : Entity
     {
         public SnakeHead(int x, int y)

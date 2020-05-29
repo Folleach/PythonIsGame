@@ -4,14 +4,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{C1E9FAA9-9319-4B15-8A94-39EB5F95E7ED}</ProjectGuid>
+    <ProjectGuid>{EE45E923-98BD-44CE-902E-B0AFF08CC062}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ClassicSnake</RootNamespace>
-    <AssemblyName>ClassicSnake</AssemblyName>
+    <RootNamespace>MultiplayerSnake.Models</RootNamespace>
+    <AssemblyName>MultiplayerSnake.Models</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -21,7 +22,6 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -52,10 +52,13 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Folleach.StreamNet.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\source\repos\Folleach.StreamNet\Folleach.StreamNet.Client\bin\Debug\netstandard2.0\Folleach.StreamNet.Common.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -64,9 +67,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ClassicSnake.cs" />
-    <Compile Include="ClassicSnakeMode.cs" />
+    <Compile Include="CSModels\ChangeDirection.cs" />
+    <Compile Include="CSModels\ChunkRequestData.cs" />
+    <Compile Include="CSModels\LoginData.cs" />
+    <Compile Include="NetworkBody.cs" />
+    <Compile Include="NetworkSnake.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SCModels\ChangeTailData.cs" />
+    <Compile Include="SCModels\ChunkData.cs" />
+    <Compile Include="SCModels\DespawnSnakeData.cs" />
+    <Compile Include="SCModels\KickData.cs" />
+    <Compile Include="SCModels\LeaderboardSetData.cs" />
+    <Compile Include="SCModels\ServerInitializePropertiesData.cs" />
+    <Compile Include="SCModels\SetMaterialData.cs" />
+    <Compile Include="SCModels\SpawnSnakeData.cs" />
+    <Compile Include="SCModels\UpdateGameStateData.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PythonIsGame.Common\PythonIsGame.Common.csproj">
@@ -75,10 +90,4 @@
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PostBuildEvent>MOVE /Y "$(TargetDir)$(TargetName)$(TargetExt)" "$(ProjectDir)..\PythonIsGame\bin\Debug\Modifications\$(TargetName)$(TargetExt)"</PostBuildEvent>
-  </PropertyGroup>
-  <PropertyGroup>
-    <PreBuildEvent>if not exist "$(ProjectDir)..\PythonIsGame\bin\Debug\Modifications" mkdir "$(ProjectDir)..\PythonIsGame\bin\Debug\Modifications"</PreBuildEvent>
-  </PropertyGroup>
 </Project>

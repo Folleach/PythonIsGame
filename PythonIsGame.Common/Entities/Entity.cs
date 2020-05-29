@@ -1,7 +1,9 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 
 namespace PythonIsGame.Common.Entities
 {
+    [Serializable]
     public class Entity : IEntity
     {
         public Point Position { get; set; }

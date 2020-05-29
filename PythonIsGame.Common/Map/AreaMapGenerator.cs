@@ -6,7 +6,7 @@ namespace PythonIsGame.Common.Map
 {
     public class AreaMapGenerator : IMapGenerator
     {
-        public int ChunkSize => 256;
+        public int ChunkSize { get; private set; }
 
         private int Left;
         private int Up;
@@ -16,13 +16,14 @@ namespace PythonIsGame.Common.Map
 
         private Random random = new Random();
 
-        public AreaMapGenerator(int left, int up, int right, int bottom, bool wallIsTeleport = false)
+        public AreaMapGenerator(int left, int up, int right, int bottom, bool wallIsTeleport = false, int chunkSize = 256)
         {
             Left = left;
             Up = up;
             Right = right;
             Bottom = bottom;
             WallIsTeleport = wallIsTeleport;
+            ChunkSize = chunkSize;
         }
 
         public Chunk Generate(Point chunkPosition)

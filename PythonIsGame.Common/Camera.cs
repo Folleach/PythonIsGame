@@ -10,9 +10,9 @@ namespace PythonIsGame.Common
 {
     public class Camera
     {
-        public Point Position { get; private set; }
-        public Point TargetPosition { get; set; }
-        public float Velocity { get; set; }
+        public PointF Position { get; private set; }
+        public PointF TargetPosition { get; set; }
+        public float Velocity { get; set; } = 0.1f;
         public bool Smooth { get; set; }
         public float Scale { get; set; } = 16f;
 
@@ -24,7 +24,8 @@ namespace PythonIsGame.Common
         {
             if (Smooth)
             {
-                // TODO: Сглаживание движения
+                var vector = new PointF(TargetPosition.X - Position.X, TargetPosition.Y - Position.Y);
+                Position = new PointF(Position.X + vector.X * Velocity, Position.Y + vector.Y * Velocity);
             }
             else
             {
@@ -32,9 +33,9 @@ namespace PythonIsGame.Common
             }
         }
 
-        public Point GetTransformPosition()
+        public PointF GetTransformPosition()
         {
-            return new Point(-Position.X, -Position.Y);
+            return new PointF(-Position.X, -Position.Y);
         }
     }
 }

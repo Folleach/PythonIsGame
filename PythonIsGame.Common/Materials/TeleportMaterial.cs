@@ -1,7 +1,9 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 
 namespace PythonIsGame.Common.Materials
 {
+    [Serializable]
     public class TeleportMaterial : IMaterial
     {
         private Point teleportPosition;

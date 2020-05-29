@@ -1,7 +1,9 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 
 namespace PythonIsGame.Common.Materials
 {
+    [Serializable]
     public class AppleMaterial : IMaterial
     {
         public int NutritionalValue = 1;

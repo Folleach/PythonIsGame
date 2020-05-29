@@ -29,8 +29,8 @@ namespace PythonIsGame.Tests
 
             teleportMaterial.Teleport(player.Head);
 
-            Assert.AreEqual(33, player.X);
-            Assert.AreEqual(-9, player.Y);
+            Assert.AreEqual(33, player.Position.X);
+            Assert.AreEqual(-9, player.Position.Y);
         }
 
         [Test]

@@ -11,7 +11,7 @@ namespace PythonIsGame.Common.Scenes
     public class DefaultGameScene : Scene
     {
         protected Snake player;
-        protected ChunkedMap map;
+        protected IMap map;
 
         protected Color background = GameColors.GameBackground;
         protected bool gradient = true;
@@ -45,9 +45,11 @@ namespace PythonIsGame.Common.Scenes
             graphics.ScaleTransform(camera.Scale, camera.Scale);
             graphics.TranslateTransform(camPos.X, camPos.Y);
             
+            if (map != null)
             foreach (var obj in map.GetMaterials())
                 graphics.FillRectangle(GetBrush(colorMapping[obj.Item1.GetType()]), new Rectangle(obj.Item2, DefaultSize));
-            foreach (var obj in player.GetEntities())
+            if (player != null)
+            foreach (var obj in map.GetEntities())
                 graphics.FillRectangle(GetBrush(colorMapping[obj.GetType()]), new Rectangle(obj.Position, DefaultSize));
         }
 
