@@ -70,13 +70,16 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Folleach.StreamNet.Client">
+      <HintPath>..\PythonIsGame\bin\Debug\Folleach.StreamNet.Client.dll</HintPath>
+    </Reference>
     <Reference Include="Folleach.StreamNet.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\source\repos\Folleach.StreamNet\Folleach.StreamNet.Server\bin\Debug\netstandard2.0\Folleach.StreamNet.Common.dll</HintPath>
+      <HintPath>..\PythonIsGame\bin\Debug\Folleach.StreamNet.Common.dll</HintPath>
     </Reference>
     <Reference Include="Folleach.StreamNet.Server, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\source\repos\Folleach.StreamNet\Folleach.StreamNet.Server\bin\Debug\netstandard2.0\Folleach.StreamNet.Server.dll</HintPath>
+      <HintPath>..\PythonIsGame\bin\Debug\Folleach.StreamNet.Server.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

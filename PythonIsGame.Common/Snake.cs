@@ -95,8 +95,8 @@ namespace PythonIsGame.Common
 
         public void StepTo(Direction direction)
         {
-            if (!CanTurn(direction))
-                return;
+            //if (!CanTurn(direction))
+            //    return;
             var delta = GetDeltaPointBy(direction);
             Position = new Point(Head.Position.X + delta.X, Head.Position.Y + delta.Y);
             previousStepDirection = direction;
@@ -114,6 +114,14 @@ namespace PythonIsGame.Common
         public virtual void RemoveTailSegment()
         {
             throw new NotImplementedException();
+        }
+
+        public virtual void RemoveAllTail()
+        {
+            foreach (var entity in tail)
+                map.RemoveEntity(entity);
+            while (tail.Count != 0)
+                tail.RemoveFirst();
         }
 
         public void Kill()

@@ -7,6 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PythonIsGame", "PythonIsGam
 	ProjectSection(ProjectDependencies) = postProject
 		{D3F0781F-2866-43F7-A888-3C75E5117821} = {D3F0781F-2866-43F7-A888-3C75E5117821}
 		{ABC6A936-8E42-4443-A3E4-EF6DA33223CE} = {ABC6A936-8E42-4443-A3E4-EF6DA33223CE}
+		{FE96D166-D71D-48F4-9F83-4CBAB209D2FD} = {FE96D166-D71D-48F4-9F83-4CBAB209D2FD}
 		{C1E9FAA9-9319-4B15-8A94-39EB5F95E7ED} = {C1E9FAA9-9319-4B15-8A94-39EB5F95E7ED}
 	EndProjectSection
 EndProject
@@ -26,6 +27,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MultiplayerSnake.Server", "
 	ProjectSection(ProjectDependencies) = postProject
 		{D3F0781F-2866-43F7-A888-3C75E5117821} = {D3F0781F-2866-43F7-A888-3C75E5117821}
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NeuralAI", "NeuralAI\NeuralAI.csproj", "{FE96D166-D71D-48F4-9F83-4CBAB209D2FD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -99,6 +102,14 @@ Global
 		{FEC86F0C-142A-4677-AEE8-B9D6226D6173}.Release|Any CPU.Build.0 = Release|Any CPU
 		{FEC86F0C-142A-4677-AEE8-B9D6226D6173}.Release|x64.ActiveCfg = Release|x64
 		{FEC86F0C-142A-4677-AEE8-B9D6226D6173}.Release|x64.Build.0 = Release|x64
+		{FE96D166-D71D-48F4-9F83-4CBAB209D2FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FE96D166-D71D-48F4-9F83-4CBAB209D2FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FE96D166-D71D-48F4-9F83-4CBAB209D2FD}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{FE96D166-D71D-48F4-9F83-4CBAB209D2FD}.Debug|x64.Build.0 = Debug|Any CPU
+		{FE96D166-D71D-48F4-9F83-4CBAB209D2FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FE96D166-D71D-48F4-9F83-4CBAB209D2FD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FE96D166-D71D-48F4-9F83-4CBAB209D2FD}.Release|x64.ActiveCfg = Release|Any CPU
+		{FE96D166-D71D-48F4-9F83-4CBAB209D2FD}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
